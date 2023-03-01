@@ -1,9 +1,9 @@
 // Fetch news title
-const fetchNewsTitle=()=>{
+const fetchNewsTitle=(defid)=>{
     const url="https://openapi.programming-hero.com/api/news/categories";
     fetch(url)
     .then(response => response.json())
-    .then(data =>  displayTitle(data.data.news_category))
+    .then(data =>  displayTitle(data.data.news_category,defid))
 }
 
 const displayTitle=(data)=>{
@@ -16,13 +16,15 @@ const displayTitle=(data)=>{
         `
     })
 }
-const fetchNews=(id)=>{
-    const url=`https://openapi.programming-hero.com/api/news/category/${id}`;
+const fetchNews=(defid)=>{
+    const search=defid ;
+    console.log(defid);
+    const url=`https://openapi.programming-hero.com/api/news/category/${search}`;
     fetch(url)
     .then(response => response.json())
     .then(data =>displayNews(data.data))
 }
-
+fetchNews("01");
 const displayNews=(data)=>{
     document.getElementById('news-container').innerHTML="";
     data.forEach(singleNews=>{
