@@ -54,10 +54,11 @@ const displayNews=(data)=>{
                             <div>
                                 <p>${total_view}</p>
                             </div>
-                            <div>
-                              
+                            <div class="flex gap-2">
+                             ${star(number)} 
+                             <p>${number}</p>
                             </div>
-                            <div onload="star(${number})" id="star">
+                            <div >
                                 <i class="fa-solid fa-arrow-right"></i>
                             </div>
                     </div>
@@ -67,14 +68,19 @@ const displayNews=(data)=>{
     })
 }
 
-const star=(totalStar)=>{
+const star=totalStar=>{
     console.log(totalStar)
-    for(let i=0;i<Math.floor(totalStar);i++){
-       starContainer=document.getElementById("star");
-       starContainer.innerHTML +=`
-       <i class="fa-solid fa-star"></i>
-       `
+    let starContainer='';
+    for(let i=1;i<=Math.floor(totalStar);i++){
+    //    starContainer=document.getElementById("star");
+       starContainer +=`
+       <i class="fa-solid fa-star"></i>`
     }
+    if(totalStar - Math.floor(totalStar)>0){
+        starContainer +=`
+       <i class="fa-solid fa-star-half"></i>`
+    }
+    return starContainer;
 }
 
 
