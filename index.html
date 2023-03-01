@@ -12,9 +12,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Online News Portal</title>
   </head>
-  <body class="w-[90%] mx-auto">
+  <body class="w-[90%] mx-auto" onload="fetchNewsTitle()">
     <header>
-      <nav class="mt-5">
+      <nav class="mt-5 mb-5">
         <div class="navbar bg-base-100">
           <div class="flex-1 gap-5">
             <a class="btn btn-primary  px-2 py-0 text-sm">News</a>
@@ -33,6 +33,16 @@
           </div>
         </div>
       </nav>
+      <hr>
     </header>
+    <!-- Header Section Completed -->
+    <!-- Main section Start HERE -->
+    <main>
+        <!-- News Title in this section -->
+        <section id="section-container" class=" lg:flex justify-between mt-5 ">
+
+        </section>
+    </main>
+    <script src="./news.js"></script>
   </body>
 </html>
