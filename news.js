@@ -26,7 +26,7 @@ const fetchNews=(id)=>{
 const displayNews=(data)=>{
     document.getElementById('news-container').innerHTML="";
     data.forEach(singleNews=>{
-        let {title,details,image_url,author,total_view,rating}=singleNews;
+        let {title,details,image_url,author,total_view,rating,_id}=singleNews;
         let {name, published_date,img}=author;
         let {number}=rating;
         // console.log(number);
@@ -41,25 +41,25 @@ const displayNews=(data)=>{
                     <div class="flex-1 card-body">
                         <h2 class="card-title">${title}</h2>
                         <p class="mt-3">${details}</p>
-                        <div class="flex items-center justify-between">
+                        <div class="lg:flex items-center justify-between">
                             <div class="flex gap-4 items-center">
                                 <div>
                                     <img class="rounded-full h-[70px] w-[70px] mt-3 " src="${img}" alt="">
                                 </div>
                                 <div>
-                                    <p>${name}</p>
+                                    <p>${name? name:"No Author Found"}</p>
                                     <p>${published_date}</p>
                                 </div>
                             </div>
                             <div>
-                                <p>${total_view}</p>
+                                <p>${total_view ? total_view :"Not Found"}</p>
                             </div>
                             <div class="flex gap-2">
                              ${star(number)} 
                              <p>${number}</p>
                             </div>
-                            <div >
-                                <i class="fa-solid fa-arrow-right"></i>
+                            <div>
+                            <label onclick="fetchDetails('${_id}')" for="my-modal" class="btn"><i class="fa-solid fa-arrow-right"></i></label>
                             </div>
                     </div>
                 </div>
@@ -82,12 +82,53 @@ const star=totalStar=>{
     }
     return starContainer;
 }
+const fetchDetails=(news_id)=>{
+    url=`https://openapi.programming-hero.com/api/news/${news_id}`
+    fetch(url)
+    .then(response => response.json())
+    .then(data =>  showDetails(data.data[0]))
+}
+const showDetails=(singleNews)=>{
+    console.log(singleNews);
+    let {title,details,image_url,author,total_view,rating,_id}=singleNews;
+        let {name, published_date,img}=author;
+        let {number}=rating;
+        // console.log(number);
+        // console.log(singleNews)
+        const newsContainer=document.getElementById('modal');
+        newsContainer.innerHTML=`
 
-
-
-
-{/* <i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star"></i>
-<i class="fa-solid fa-star-half"></i> */}
+        <div class="bg-base-100 mt-5 shadow-xl ">
+            <div class="w-full flex-1">
+                <img class="min-w-full" src="${image_url}" alt=""/>
+            </div>
+            <div class="flex-1 card-body">
+                <h2 class="card-title">${title}</h2>
+                <p class="mt-3">${details}</p>
+                <div class=" items-center justify-between">
+                    <div class=" gap-4 items-center">
+                        <div>
+                            <img class="rounded-full h-[70px] w-[70px] mt-3 " src="${img}" alt="">
+                        </div>
+                        <div>
+                            <p>${name? name:"No Author Found"}</p>
+                            <p>${published_date}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p>${total_view ? total_view :"Not Found"}</p>
+                    </div>
+                    <div class="flex gap-2">
+                     ${star(number)} 
+                     <p>${number}</p>
+                    </div>
+                    <div>
+            </div>
+        </div>
+        </div>
+        <div class="flex mt-3 justify-center">
+        <label for="my-modal" class="btn  ">Close</label>
+        </div>
+       
+          `
+}
