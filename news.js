@@ -1,4 +1,6 @@
 // Fetch news title
+
+let dataVariable;
 const fetchNewsTitle=()=>{
     const url="https://openapi.programming-hero.com/api/news/categories";
     fetch(url)
@@ -13,13 +15,16 @@ const displayTitle=(data)=>{
         const {category_name,category_id}=singleData;
         const titleContainer=document.getElementById("section-container");
         titleContainer.innerHTML+=`
-        <p onclick="fetchNews('${category_id}')">${category_name}</p>
+        <p onclick="fetchNews('${category_id}','${category_name}')">${category_name}</p>
         `
     })
 }
-const fetchNews=(defid)=>{
+const fetchNews=(defid,name)=>{
+    if(name === undefined){
+        name="Breaking News";
+    }
+    document.getElementById("tranding-text").innerHTML=name;
     const search=defid ;
-    console.log(defid);
     const url=`https://openapi.programming-hero.com/api/news/category/${search}`;
     fetch(url)
     .then(response => response.json())
@@ -27,15 +32,16 @@ const fetchNews=(defid)=>{
 }
 fetchNews("01");
 const displayNews=(data)=>{
+    dataVariable=data;
     document.getElementById('news-container').innerHTML="";
     data.forEach(singleNews=>{
+        
         let {title,details,image_url,author,total_view,rating,_id}=singleNews;
         let {name, published_date,img}=author;
         let {number}=rating;
         const tranding=singleNews.others_info.is_trending;
-        console.log(tranding);
+        // console.log(tranding);
         // console.log(number);
-        console.log(singleNews)
         details=details.slice(0,200)
         const newsContainer=document.getElementById('news-container');
         newsContainer.innerHTML +=`
@@ -137,3 +143,56 @@ const showDetails=(singleNews)=>{
        
           `
 }
+
+document.getElementById("tranding-btn").addEventListener("click",function(){
+    document.getElementById('news-container').innerHTML="";
+    // console.log("ok")
+    dataVariable.forEach(single =>{
+        // console.log(single)
+        const tranding=single.others_info.is_trending;
+        if(tranding == true){
+            let {title,details,image_url,author,total_view,rating,_id}=single;
+            let {name, published_date,img}=author;
+            let {number}=rating;
+            const tranding=single.others_info.is_trending;
+            details=details.slice(0,200)
+            const newsContainer=document.getElementById('news-container');
+            newsContainer.innerHTML +=`
+            <div class="bg-base-100 mt-5 shadow-xl lg:flex ">
+                        <div class="w-full flex-1">
+                            <img class="min-w-full" src="${image_url}" alt=""/>
+                        </div>
+                        <div class="flex-1 card-body">
+                            <h2 class="card-title">${title}</h2>
+                            <div class="badge badge-secondary">${tranding ? "Tranding" : "Not Tranding"}</div>
+                            <p class="mt-3">${details}</p>
+                            <div class="lg:flex items-center justify-between">
+                                <div class="flex gap-4 items-center">
+                                    <div>
+                                        <img class="rounded-full h-[70px] w-[70px] mt-3 " src="${img}" alt="">
+                                    </div>
+                                    <div>
+                                        <p>${name? name:"No Author Found"}</p>
+                                        <p>${published_date}</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>${total_view ? total_view :"Not Found"}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                 ${star(number)} 
+                                 <p>${number}</p>
+                                </div>
+                                <div>
+                                <label onclick="fetchDetails('${_id}')" for="my-modal" class="btn"><i class="fa-solid fa-arrow-right"></i></label>
+                                </div>
+                        </div>
+                    </div>
+            </div>
+              `
+
+        }
+
+    })
+    
+})
